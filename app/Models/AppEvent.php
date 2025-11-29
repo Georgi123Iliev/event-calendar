@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 
@@ -15,18 +16,18 @@ class AppEvent extends Model
 
     use HasFactory;
     //
-    protected $table = 'app_events';
+    //protected $table = 'app_events';
 
     protected static function validateEvent($event)
     {
-        // 1️⃣ Ensure end is after start
+        // Ensure end is after start
         if ($event->end_at <= $event->start_at) {
             throw ValidationException::withMessages([
                 'end_at' => 'End date must be after start date.',
             ]);
         }
 
-        // 2️⃣ Ensure location is not double-booked
+        // Ensure location is not double-booked
         $overlapping = self::where('location_id', $event->location_id)
             ->where(function ($query) use ($event) {
                 $query->whereBetween('start_at', [$event->start_at, $event->end_at])
@@ -80,4 +81,16 @@ class AppEvent extends Model
     {
         return $this->belongsToMany(Organizer::class);
     }
+
+
+    public function tickets() : HasMany
+    {
+        return $this->HasMany(Ticket::class);
+    }
+
+    public function checkIns() : HasMany
+    {
+        return $this->HasMany(CheckIn::class);
+    }
+
 }

@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
-    protected $fillable = ['event_id','type_id','price','quota'];
+
+    use HasFactory;
+
+    protected $fillable = ['event_id','ticket_type_id','price','quota'];
 
 
      protected static function validateTicket($ticket)
      {
-       $query = self::where('event_id',$ticket->event_id)->where('type_id',$ticket->type_id);
+       $query = self::where('app_event_id',$ticket->app_event_id)->where('ticket_type_id',$ticket->ticket_type_id);
       
 
        if ($ticket->exists) {
@@ -26,7 +29,7 @@ class Ticket extends Model
       {
         throw ValidationException::withMessages([
                 'event_id' => ['A ticket for this event already exists.'],
-                'type_id'  => ['This ticket type is already taken for the event.']
+                'ticket_type_id'  => ['This ticket type is already taken for the event.']
             ]);
       }
 

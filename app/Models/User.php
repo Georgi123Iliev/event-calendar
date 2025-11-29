@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -49,6 +50,12 @@ class User extends Authenticatable
     }
 
 
+public function organizer() : HasOne
+    {
+        return $this->HasOne(Organizer::class);
+    }
+
+
 protected static function booted()
     {
         static::creating(function ($user) {
@@ -60,4 +67,8 @@ protected static function booted()
             }
         });
     }
+
+
+
+
 }

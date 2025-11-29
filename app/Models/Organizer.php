@@ -12,7 +12,8 @@ class Organizer extends Model
 
       protected $fillable = [
     'name',
-    'email'
+    'email',
+    'user_id'
     ];
 
    public function appEvents() : BelongsToMany
@@ -20,4 +21,11 @@ class Organizer extends Model
         return $this->belongsToMany(AppEvent::class);
     }
 
+public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    
 }
